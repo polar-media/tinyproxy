@@ -30,8 +30,10 @@ int parse_ipv6(char *buf, char *prefix, char *hostmask) {
     return 0;
 }
 
-int get_ipv6_for_subnet(char input, char *result) {
+int get_ipv6_for_subnet(char *input, char *result) {
     const char *p;
+
+    char *prefix;
 
     unsigned char address[16];
     char saddress[100];
@@ -40,7 +42,8 @@ int get_ipv6_for_subnet(char input, char *result) {
     char sprefix[100];
     char hostmax[4];
 
-    parse_ipv6(input, sprefix, hostmax);
+    strcpy(prefix, input);
+    parse_ipv6(prefix, sprefix, hostmax);
     int hostMaxInt = atoi(hostmax);
     int randomFrom = hostMaxInt / 8;
 
