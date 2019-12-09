@@ -126,6 +126,9 @@ int opensock (const char *host, int port, const char *bind_to)
                 if (sockfd < 0)
                         continue;       /* ignore this one */
 
+                const int one = 1;
+                setsockopt(sockfd, SOL_IP, IP_FREEBIND, &one, sizeof(one));
+
                 /* Bind to the specified address */
                 if (bind_to) {
                         if (bind_socket (sockfd, bind_to,
