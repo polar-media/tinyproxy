@@ -1554,7 +1554,7 @@ void handle_connection (int fd)
             get_ipv6_for_subnet(config.bindrandom, sock_ipaddr);
             log_message(LOG_CONN, "Got address: %s", sock_ipaddr);
         }
-        
+
         log_message (LOG_CONN, config.bindsame ?
                      "Connect (file descriptor %d): %s [%s] at [%s]" :
                      "Connect (file descriptor %d): %s [%s]",
