@@ -86,4 +86,4 @@ int *get_ipv6_for_subnet(char *input, char *result) {
 }
 
 
-#endif //TINYPROXY_IP_TOOLS_H
+#endif
