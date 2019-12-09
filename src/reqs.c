@@ -49,6 +49,7 @@
 #include "connect-ports.h"
 #include "conf.h"
 #include "basicauth.h"
+#include "ip-tools.h"
 
 /*
  * Maximum length of a HTTP line
@@ -1523,7 +1524,6 @@ get_request_entity(struct conn_s *connptr)
         return ret;
 }
 
-
 /*
  * This is the main drive for each connection. As you can tell, for the
  * first few steps we are using a blocking socket. If you remember the
@@ -1549,13 +1549,19 @@ void handle_connection (int fd)
         if (config.bindsame)
                 getsock_ip (fd, sock_ipaddr);
 
+        if (config.bindrandom) {
+            log_message (LOG_CONN, "Binding to random address, %s", config.bindrandom);
+            get_ipv6_for_subnet(config.bindrandom, sock_ipaddr);
+            log_message(LOG_CONN, "Got address: %s", sock_ipaddr);
+        }
+        
         log_message (LOG_CONN, config.bindsame ?
                      "Connect (file descriptor %d): %s [%s] at [%s]" :
                      "Connect (file descriptor %d): %s [%s]",
                      fd, peer_string, peer_ipaddr, sock_ipaddr);
 
         connptr = initialize_conn (fd, peer_ipaddr, peer_string,
-                                   config.bindsame ? sock_ipaddr : NULL);
+                                   (config.bindsame || config.bindrandom) ? sock_ipaddr : NULL);
         if (!connptr) {
                 close (fd);
                 return;

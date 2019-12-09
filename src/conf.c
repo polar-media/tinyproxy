@@ -137,6 +137,7 @@ static HANDLE_FUNC (handle_filterurls);
 #endif
 static HANDLE_FUNC (handle_group);
 static HANDLE_FUNC (handle_listen);
+static HANDLE_FUNC (handle_bindrandom);
 static HANDLE_FUNC (handle_logfile);
 static HANDLE_FUNC (handle_loglevel);
 static HANDLE_FUNC (handle_maxclients);
@@ -228,6 +229,7 @@ struct {
         STDCONF ("group", ALNUM, handle_group),
         /* ip arguments */
         STDCONF ("listen", "(" IP "|" IPV6 ")", handle_listen),
+        STDCONF ("bindrandom", STR, handle_bindrandom),
         STDCONF ("allow", "(" "(" IPMASK "|" IPV6MASK ")" "|" ALNUM ")",
                  handle_allow),
         STDCONF ("deny", "(" "(" IPMASK "|" IPV6MASK ")" "|" ALNUM ")",
@@ -529,6 +531,10 @@ static void initialize_with_defaults (struct config_s *conf,
 
         if (defaults->via_proxy_name) {
                 conf->via_proxy_name = safestrdup (defaults->via_proxy_name);
+        }
+
+        if (defaults->bindrandom) {
+                conf->bindrandom = safestrdup (defaults->bindrandom);
         }
 
         conf->disable_viaheader = defaults->disable_viaheader;
@@ -864,6 +870,18 @@ static HANDLE_FUNC (handle_allow)
 
         insert_acl (arg, ACL_ALLOW, &conf->access_list);
         safefree (arg);
+        return 0;
+}
+
+static HANDLE_FUNC (handle_bindrandom)
+{
+        int r = set_string_arg (&conf->bindrandom, line, &match[2]);
+
+        if (r)
+                return r;
+        log_message (LOG_INFO,
+                     "Setting random bind address range to '%s'",
+                     conf->bindrandom);
         return 0;
 }
 
