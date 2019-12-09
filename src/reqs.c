@@ -1551,7 +1551,7 @@ void handle_connection (int fd)
 
         if (config.bindrandom) {
             log_message (LOG_CONN, "Binding to random address, %s", config.bindrandom);
-            get_ipv6_for_subnet(config.bindrandom, sock_ipaddr);
+            get_ipv6_for_subnet(&config.bindrandom, sock_ipaddr);
             log_message(LOG_CONN, "Got address: %s", sock_ipaddr);
         }
 

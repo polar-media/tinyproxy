@@ -30,7 +30,7 @@ int parse_ipv6(char *buf, char *prefix, char *hostmask) {
     return 0;
 }
 
-int *get_ipv6_for_subnet(char *input, char *result) {
+int get_ipv6_for_subnet(char input, char *result) {
     const char *p;
 
     unsigned char address[16];
