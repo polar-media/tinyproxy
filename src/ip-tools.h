@@ -16,7 +16,7 @@
 int parse_ipv6(char *buf, char *prefix, char *hostmask) {
     int i = 0;
     char *p = strtok (buf, "/");
-    char *array[3];
+    char *array[2];
 
     while (p != NULL)
     {
@@ -33,17 +33,15 @@ int parse_ipv6(char *buf, char *prefix, char *hostmask) {
 int get_ipv6_for_subnet(char *input, char *result) {
     const char *p;
 
-    char *prefix;
-
     unsigned char address[16];
     char saddress[100];
     int rc, fd;
 
     char sprefix[100];
     char hostmax[4];
-
-    strcpy(prefix, input);
-    parse_ipv6(prefix, sprefix, hostmax);
+    char prefix_address[100];
+    strcpy(prefix_address, input);
+    parse_ipv6(input, sprefix, hostmax);
     int hostMaxInt = atoi(hostmax);
     int randomFrom = hostMaxInt / 8;
 
